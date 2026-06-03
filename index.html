@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متجر هالة للأكواب | Hala Mug</title>
+    <meta name="description" content="متجر هالة للأكواب — تصاميم فنية وأكواب مخصصة">
+    <meta name="theme-color" content="#5b21b6">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Hala Mug">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="32x32" href="./hala-mughtml_files/favicon.ico">
+    <link rel="icon" type="image/png" sizes="192x192" href="./hala-mughtml_files/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="./hala-mughtml_files/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./hala-mughtml_files/hala.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <a href="#" class="brand">
+            <img src="./hala-mughtml_files/logo1.png" alt="Hala Mug" class="brand-logo" width="140" height="56">
+            <span class="brand-copy">
+                <strong>فن هالة للأكواب</strong>
+                <small>لمسة فنية في كل رشفة</small>
+            </span>
+        </a>
+
+        <div class="header-tools">
+            <div class="search-box">
+                <i class="fas fa-search search-box__icon"></i>
+                <input type="search" id="searchInput" placeholder="ابحث عن تصميمك..." onkeyup="searchCups()" autocomplete="off">
+            </div>
+            <button type="button" class="btn btn--ghost" onclick="openOrderModal('طلب تصميم مخصص عحسب الذوق')">
+                <i class="fas fa-wand-magic-sparkles"></i>
+                طلب مخصص
+            </button>
+            <button type="button" id="darkModeToggle" class="btn btn--icon" aria-label="تبديل الوضع الليلي">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<button type="button" class="wishlist-fab" onclick="toggleWishlist()" aria-label="المفضلة">
+    <i class="fas fa-heart"></i>
+    <span class="wishlist-fab__count" id="wishlist-count">0</span>
+</button>
+
+<section class="hero">
+    <div class="hero__content">
+        <span class="hero__badge">صناعة يدوية · تصاميم حصرية</span>
+        <h1 class="hero__title">أكواب تحكي قصتك<br>بلمسة فنية فريدة</h1>
+        <p class="hero__text">اختر من مجموعتنا المميزة أو اطلب تصميماً مخصصاً يعكس ذوقك — نوصل لبابك مع عناية بكل تفصيلة.</p>
+        <div class="hero__actions">
+            <a href="#catalog" class="btn btn--primary">تصفح المجموعة</a>
+            <button type="button" class="btn btn--outline" onclick="openOrderModal('طلب تصميم مخصص عحسب الذوق')">صمّم كوبك</button>
+        </div>
+        <ul class="hero__stats">
+            <li><strong>18+</strong><span>تصميم</span></li>
+            <li><strong>100%</strong><span>يدوي</span></li>
+            <li><strong>واتساب</strong><span>طلب سريع</span></li>
+        </ul>
+    </div>
+    <div class="hero__visual" aria-hidden="true">
+        <div class="hero__orb hero__orb--1"></div>
+        <div class="hero__orb hero__orb--2"></div>
+        <img src="./hala-mughtml_files/logo1.png" alt="" class="hero__logo">
+    </div>
+</section>
+
+<main class="main-content" id="catalog">
+    <div class="section-head">
+        <h2>مجموعة الأكواب</h2>
+        <p>تصاميم مختارة بعناية — اضغط «اطلب الآن» أو أضف للمفضلة</p>
+    </div>
+
+    <div id="gallery-loading" class="gallery-status">
+        <div class="spinner"></div>
+        <span>جاري تحميل المجموعة...</span>
+    </div>
+    <div id="gallery-error" class="gallery-status gallery-status--error" style="display:none;"></div>
+    <div class="gallery-grid" id="gallery-grid"></div>
+</main>
+
+<div id="wishlist-modal" class="modal" role="dialog" aria-labelledby="wishlist-title">
+    <div class="modal-panel modal-panel--sm">
+        <div class="modal-panel__header">
+            <h2 id="wishlist-title"><i class="fas fa-heart"></i> أكوابي المفضلة</h2>
+            <button type="button" class="modal-close" onclick="toggleWishlist()" aria-label="إغلاق">&times;</button>
+        </div>
+        <div class="modal-panel__body" id="wishlist-items">
+            <p class="empty-state">قائمتك فارغة — أضف أكواباً من المعرض</p>
+        </div>
+        <div class="modal-panel__footer">
+            <button type="button" onclick="finalWishlistOrder()" class="btn btn--whatsapp btn--block">
+                <i class="fab fa-whatsapp"></i>
+                إرسال القائمة عبر واتساب
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="orderModal" class="modal" role="dialog">
+    <div class="modal-panel modal-panel--md order-form">
+        <div class="modal-panel__header">
+            <h2><i class="fas fa-pen-fancy"></i> تفاصيل الطلب</h2>
+            <button type="button" class="modal-close" onclick="closeOrderModal()" aria-label="إغلاق">&times;</button>
+        </div>
+        <div class="modal-panel__body">
+            <p class="order-product" id="selectedProductName"></p>
+
+            <div class="form-field">
+                <label for="customerName">الاسم الكامل</label>
+                <input type="text" id="customerName" placeholder="الاسم الثلاثي">
+            </div>
+            <div class="form-field">
+                <label for="customerPhone">رقم الجوال</label>
+                <input type="tel" id="customerPhone" placeholder="059-xxxxxxx" dir="ltr">
+            </div>
+            <div class="form-field">
+                <label for="customerAddress">العنوان</label>
+                <input type="text" id="customerAddress" placeholder="المدينة — الحي — الشارع">
+            </div>
+            <div class="form-field" id="detailsGroup">
+                <label for="customDetails" id="detailsLabel">وصف الطلب</label>
+                <textarea id="customDetails" rows="3" placeholder="مثال: اسم ليلى باللون الذهبي..."></textarea>
+            </div>
+            <div class="form-field">
+                <label for="paymentMethod">طريقة الدفع</label>
+                <select id="paymentMethod">
+                    <option value="عبر التطبيق">عبر التطبيق</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-panel__footer">
+            <button type="button" class="btn btn--whatsapp btn--block" onclick="sendToWhatsApp()">
+                <i class="fab fa-whatsapp"></i>
+                تأكيد الطلب عبر واتساب
+            </button>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-grid">
+        <div class="footer-col footer-col--brand">
+            <img src="./hala-mughtml_files/logo1.png" alt="Hala Mug" class="footer-logo">
+            <p>تشكيلة أكواب فنية مصنوعة بكل حب — لتكون مميزاً في كل تفاصيل يومك.</p>
+        </div>
+        <div class="footer-col">
+            <h3>تواصل معنا</h3>
+            <a href="tel:+972597825817" class="footer-link"><i class="fas fa-phone"></i><span dir="ltr">+972 597 825 817</span></a>
+            <a href="https://wa.me/32465887441" class="footer-link" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i><span dir="ltr">+32 465 887 441</span></a>
+            <a href="mailto:Nassar@dr.com" class="footer-link"><i class="fas fa-envelope"></i><span>Nassar@dr.com</span></a>
+        </div>
+        <div class="footer-col">
+            <h3>تابعنا</h3>
+            <a href="https://www.instagram.com/hala_nassar_art" target="_blank" rel="noopener" class="footer-link footer-link--social">
+                <i class="fab fa-instagram"></i> hala_nassar_art
+            </a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2026 Hala Mug — جميع الحقوق محفوظة</p>
+    </div>
+</footer>
+
+<div id="toast" class="toast" role="status">تمت الإضافة للمفضلة</div>
+<button type="button" id="backToTop" onclick="scrollToTop()" title="العودة للأعلى" aria-label="الأعلى">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<script src="./hala-mughtml_files/script.js"></script>
+</body>
+</html>
